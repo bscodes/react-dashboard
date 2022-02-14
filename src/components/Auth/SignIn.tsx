@@ -3,9 +3,15 @@ import { useDispatch, useSelector } from 'react-redux';
 import { NavigateFunction, useNavigate } from 'react-router-dom';
 import { loginUser } from '../../actions/auth';
 import { RootState } from '../../reducers';
+import './SignIn.scss';
+
+interface IFomData {
+  username: string;
+  password: string;
+}
 
 const SignIn = () => {
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<IFomData>({
     username: 'karn.yong@mecallapi.com',
     password: 'mecallapi',
   });
@@ -38,11 +44,11 @@ const SignIn = () => {
 
   return (
     <>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} className="sign-in-form">
         <h1>Sign In</h1>
 
         <fieldset>
-          <label htmlFor="username">username:</label>
+          <label htmlFor="username">Username:</label>
           <input
             type="text"
             name="username"
