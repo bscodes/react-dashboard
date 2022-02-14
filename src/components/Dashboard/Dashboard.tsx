@@ -1,4 +1,3 @@
-import { useCallback, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useGetTodos } from '../../hooks/useGetTodos';
 import { RootState } from '../../reducers';
