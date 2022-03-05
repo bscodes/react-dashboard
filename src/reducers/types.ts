@@ -1,6 +1,7 @@
 export interface IAuthState {
   authChecked: boolean;
   loggedIn: boolean;
+  isLoading: boolean;
   currentUser: {};
 }
 

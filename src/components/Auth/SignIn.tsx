@@ -17,7 +17,7 @@ const SignIn = () => {
   });
 
   const dispatch: Dispatch<any> = useDispatch();
-  const { loggedIn } = useSelector((state: RootState) => state.auth);
+  const { loggedIn, isLoading } = useSelector((state: RootState) => state.auth);
 
   const navigate: NavigateFunction = useNavigate();
 
@@ -67,7 +67,7 @@ const SignIn = () => {
             value={password || 'mecallapi'}
           />
         </fieldset>
-        <button type="submit">Log In</button>
+        <button type="submit">{isLoading ? 'Please wait..' : 'Log In'}</button>
       </form>
     </>
   );
