@@ -1,5 +1,6 @@
 import { Dispatch } from 'react';
-import { AUTHENTICATED, NOT_AUTHENTICATED } from '.';
+import { AUTHENTICATED, IS_LOADING, NOT_AUTHENTICATED } from '.';
+import axios from 'axios';
 
 type TSetToken = (token: string) => void;
 
@@ -40,27 +41,40 @@ type TLogin = (credentials: any) => (dispatch: Dispatch<any>) => Promise<void>;
 
 export const loginUser: TLogin = (credentials) => {
   return (dispatch) => {
+    const url = 'https://www.mecallapi.com/api/login';
+
     const login = async () => {
-      await fetch('https://www.mecallapi.com/api/login', {
-        method: 'POST',
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(credentials),
-      }).then((res: Response) => {
-        if (res.ok) {
-          return res.json().then((userJson) => {
-            dispatch({ type: AUTHENTICATED, payload: userJson });
-            setToken(userJson.accessToken);
-          });
-        } else {
-          return res.json().then((errors) => {
-            dispatch({ type: NOT_AUTHENTICATED });
-            return Promise.reject(errors);
-          });
-        }
+      dispatch({
+        type: IS_LOADING,
+        payload: true,
       });
+      axios
+        .post(url, credentials, {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        })
+        .then((res) => {
+          const token = res.data.token;
+          setToken(token);
+          dispatch({
+            type: AUTHENTICATED,
+            payload: {
+              token,
+            },
+          });
+          dispatch({
+            type: IS_LOADING,
+            payload: false,
+          });
+        })
+        .catch((err) => {
+          console.log(err);
+          dispatch({
+            type: IS_LOADING,
+            payload: false,
+          });
+        });
     };
     return login();
   };
